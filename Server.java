@@ -79,7 +79,7 @@ class ClientHandler implements Runnable {
                     break;
                 }
                 try {
-                    int result = evaluate(input);
+                    double result = evaluate(input);
                     out.println("Result: " + result);
                     log("REQUEST: " + input);
                 } catch (Exception e) {
@@ -112,19 +112,16 @@ class ClientHandler implements Runnable {
     }
 
     // Takes in a string expression and evaluates the expression. It also recognizes of a string has spaces, and if it does gets rid of the spaces then finds the operation.
-    private int evaluate(String expression) throws Exception {
-        // Remove all spaces from the input
+    private double evaluate(String expression) throws Exception {
         expression = expression.replaceAll("\\s+", "");
-    
         String[] tokens;
         String operator;
-    
-        // Detect the operator and split the operands
+
         if (expression.contains("+")) {
             tokens = expression.split("\\+");
             operator = "+";
         } else if (expression.contains("-")) {
-            tokens = expression.split("-", 2); // handle negative numbers correctly
+            tokens = expression.split("-");
             operator = "-";
         } else if (expression.contains("*")) {
             tokens = expression.split("\\*");
@@ -135,23 +132,18 @@ class ClientHandler implements Runnable {
         } else {
             throw new IllegalArgumentException("Invalid operator");
         }
-    
-        if (tokens.length != 2) {
-            throw new IllegalArgumentException("Invalid format: must be two operands and one operator");
-        }
-    
-        int a = Integer.parseInt(tokens[0]);
-        int b = Integer.parseInt(tokens[1]);
-    
+
+        if (tokens.length != 2) throw new IllegalArgumentException("Invalid format");
+
+        double a = Double.parseDouble(tokens[0]);
+        double b = Double.parseDouble(tokens[1]);
+
         switch (operator) {
             case "+": return a + b;
             case "-": return a - b;
             case "*": return a * b;
-            case "/":
-                if (b == 0) throw new ArithmeticException("Division by zero");
-                return a / b; // integer division
-            default:
-                throw new IllegalArgumentException("Unknown operator");
+            case "/": if (b == 0) throw new ArithmeticException("Divide by zero"); return a / b;
+            default: throw new IllegalArgumentException("Unknown operator");
         }
     }
 }
