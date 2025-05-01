@@ -32,6 +32,11 @@ public class Client {
                     out.println("exit");
                     break;
                 }
+                else if (!choice.equalsIgnoreCase("y")) {
+                        System.out.println("Invalid input. Please enter 'y' or 'n'");
+                        continue;
+                }
+                
                 System.out.print("Enter math operation: ");
                 String expr = scanner.nextLine();
                 out.println(expr);
@@ -40,7 +45,7 @@ public class Client {
 
             socket.close();
             scanner.close();
-        } catch (Exception e) {
+            } catch (Exception e) {
             e.printStackTrace();
         }
     }
