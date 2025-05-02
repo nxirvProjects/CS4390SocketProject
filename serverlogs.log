@@ -1,0 +1,20 @@
+May 01, 2025 9:52:33 PM LogClass logServerActivity
+INFO: 
+ACK: Connected to Math Server as vishnu
+May 01, 2025 9:52:45 PM LogClass logServerActivity
+INFO: 
+REQUEST: -3+4
+RESPONSE: 1.0
+May 01, 2025 9:52:54 PM LogClass logServerActivity
+INFO: 
+REQUEST: 4--3
+RESPONSE: 7.0
+May 01, 2025 9:53:02 PM LogClass logServerActivity
+INFO: 
+INVALID REQUEST: hello
+May 01, 2025 9:53:03 PM LogClass logServerActivity
+INFO: 
+DISCONNECTED
+May 01, 2025 9:53:03 PM LogClass logServerActivity
+INFO: 
+SESSION CLOSED WITH USER: vishnu. Duration: 30 seconds

@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.logging.*;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 
 class LogClass {
@@ -192,36 +194,30 @@ class ClientHandler implements Runnable {
     // Takes in a string expression and evaluates the expression. It also recognizes of a string has spaces, and if it does gets rid of the spaces then finds the operation.
     private double evaluate(String expression) throws Exception {
         expression = expression.replaceAll("\\s+", "");
-        String[] tokens;
-        String operator;
-
-        if (expression.contains("+")) {
-            tokens = expression.split("\\+");
-            operator = "+";
-        } else if (expression.contains("-")) {
-            tokens = expression.split("-");
-            operator = "-";
-        } else if (expression.contains("*")) {
-            tokens = expression.split("\\*");
-            operator = "*";
-        } else if (expression.contains("/")) {
-            tokens = expression.split("/");
-            operator = "/";
-        } else {
-            throw new IllegalArgumentException("Invalid operator");
+    
+        // Match: optional sign + number, operator, optional sign + number
+        // Example matches: "-3+4", "5*-2", "-10/-2"
+        String regex = "(-?\\d+(\\.\\d+)?)([+\\-*/])(-?\\d+(\\.\\d+)?)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(expression);
+    
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException("Invalid format or unsupported expression");
         }
-
-        if (tokens.length != 2) throw new IllegalArgumentException("Invalid format");
-
-        double a = Double.parseDouble(tokens[0]);
-        double b = Double.parseDouble(tokens[1]);
-
+    
+        double a = Double.parseDouble(matcher.group(1));
+        String operator = matcher.group(3);
+        double b = Double.parseDouble(matcher.group(4));
+    
         switch (operator) {
             case "+": return a + b;
             case "-": return a - b;
             case "*": return a * b;
-            case "/": if (b == 0) throw new ArithmeticException("Divide by zero"); return a / b;
+            case "/":
+                if (b == 0) throw new ArithmeticException("Divide by zero");
+                return a / b;
             default: throw new IllegalArgumentException("Unknown operator");
         }
     }
+    
 }
